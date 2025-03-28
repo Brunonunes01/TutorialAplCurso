@@ -28,12 +28,39 @@ public class EstadoDAO implements GenericDAO{
 
     @Override
     public Boolean cadastrar(Object objeto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       Estado oEstado = (Estado) objeto;
+       Boolean retorno = false;
+       if (oEstado.getIdEstado() == 0) {
+           retorno = this.inserir(oEstado);
+           
+       }else {
+           retorno = this.alterar(oEstado);
+       }
+        return retorno;
     }
 
     @Override
     public Boolean inserir(Object objeto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+      Estado oEstado = (Estado) objeto;
+      PreparedStatement stmt = null;
+      String sql = "insert into estado (nomeestado, siglaestado) values (?,?)";
+      try{
+          stmt = conexao.prepareStatement(sql);
+          stmt.setString(1, oEstado.getNomeEstado());
+          stmt.setString(2, oEstado.getSiglaEstado());
+          stmt.execute();
+          return true;
+      } catch (Exception ex){
+      try {
+          System.out.println("Problemas ao cadastrar a Estado! Erro: "+ex.getMessage());
+          ex.printStackTrace();
+          conexao.rollback();
+      } catch (SQLException e){
+          System.out.println("Erro:"+e.getMessage());
+          e.printStackTrace();
+      }
+      return false;
+      }
     }
 
     @Override
