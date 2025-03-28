@@ -1,16 +1,12 @@
-package br.com.curso.controller.estado;
-
-
-
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
-
-import br.com.curso.model.Estado;
-import br.com.curso.dao.GenericDAO;
+* Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+* Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+*/
+package br.com.curso.controller.estado;
+ 
 import br.com.curso.dao.EstadoDAO;
+import br.com.curso.dao.GenericDAO;
+import br.com.curso.model.Estado;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -25,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "EstadoCadastrar", urlPatterns = {"/EstadoCadastrar"})
 public class EstadoCadastrar extends HttpServlet {
-
+ 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,32 +33,29 @@ public class EstadoCadastrar extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    response.setContentType("text/html;charset=iso-8859-1");
-    int idEstado = Integer.parseInt(request.getParameter("idestado"));
-    String nomeEstado = request.getParameter("nomeestado");
-    String siglaEstado = request.getParameter("siglaestado");
-    String mensagem = null;
-
-    Estado oEstado = new Estado();
-    oEstado.setIdEstado(idEstado);
-    oEstado.setNomeEstado(nomeEstado);
-    oEstado.setSiglaEstado(siglaEstado);
-
-    try {
-        GenericDAO dao = new EstadoDAO();
-        if (dao.cadastrar(oEstado)) {
-            mensagem = "Estado cadastrado com sucesso!";
-        } else {
-            mensagem = "Problemas ao cadastrar Estado. Verifique os dados informados e tente novamente!";
-        }
-        request.setAttribute("mensagem", mensagem);
-        response.sendRedirect("EstadoListar");
-    } catch (Exception ex) {
-        System.out.println("Problemas no Servlet ao cadastrar Estado! Erro: " + ex.getMessage());
-    }
+        response.setContentType("text/html;charset=iso-8859-1");
+        int idEstado = Integer.parseInt(request.getParameter("idestado"));
+        String nomeEstado = request.getParameter("nomeestado");
+        String siglaEstado = request.getParameter("siglaestado");
+        String mensagem = null;
+        Estado oEstado = new Estado();
+        oEstado.setIdEstado(idEstado);
+        oEstado.setNomeEstado(nomeEstado);
+        oEstado.setSiglaEstado(siglaEstado);
+        try{
+            GenericDAO dao = new EstadoDAO();
+            if (dao.cadastrar(oEstado)){
+                mensagem = "Estado cadastrado com sucesso!";
+            } else {
+                mensagem = "Problemas ao cadastrar Estado.Verifique os dados informados e tente novamente!";
+                }
+            request.setAttribute("mensagem", mensagem);
+            response.sendRedirect("EstadoListar");
+            } catch (Exception ex){
+                System.out.println("Problemas no Servlet ao cadastrar Estado! Erro: " + ex.getMessage());
         }
     }
-
+ 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -77,7 +70,7 @@ public class EstadoCadastrar extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
+ 
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -91,7 +84,7 @@ public class EstadoCadastrar extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
+ 
     /**
      * Returns a short description of the servlet.
      *
@@ -101,5 +94,5 @@ public class EstadoCadastrar extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-
+ 
+}
