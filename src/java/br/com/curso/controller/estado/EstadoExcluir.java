@@ -4,7 +4,8 @@
  */
 package br.com.curso.controller.estado;
 
-import br.com.curso.model.Estado;
+import br.com.curso.dao.EstadoDAO;
+import br.com.curso.dao.GenericDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -17,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Bruno
  */
-@WebServlet(name = "EstadoNovo", urlPatterns = {"/EstadoNovo"})
-public class EstadoNovo extends HttpServlet {
+@WebServlet(name = "EstadoExcluir", urlPatterns = {"/EstadoExcluir"})
+public class EstadoExcluir extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,14 +30,30 @@ public class EstadoNovo extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-     response.setContentType("text/html;charset=iso-8859-1");
-     Estado oEstado = new Estado();
-     request.setAttribute("estado", oEstado);
-     request.getRequestDispatcher("/cadastros/estado/estadoCadastrar.jsp").forward(request, response);
+ protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+    
+    response.setContentType("text/html;charset=iso-8859-1");
+    int idEstado = Integer.parseInt(request.getParameter("idEstado"));
+    String mensagem = null;
+    
+    try {
+        GenericDAO dao = new EstadoDAO();
+        
+        if (dao.excluir(idEstado)) {
+            mensagem = "Estado excluído com Sucesso!";
+        } else {
+            mensagem = "Problemas ao excluir Estado";
+        }
+        
+        request.setAttribute("mensagem", mensagem);
+        response.sendRedirect("EstadoListar");
+        
+    } catch (Exception ex) {
+        System.out.println("Problemas no Servlet ao excluir Estado! Erro: " + ex.getMessage());
+        ex.printStackTrace();
     }
-
+}
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

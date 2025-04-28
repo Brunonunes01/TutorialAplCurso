@@ -4,7 +4,8 @@
  */
 package br.com.curso.controller.estado;
 
-import br.com.curso.model.Estado;
+import br.com.curso.dao.EstadoDAO;
+import br.com.curso.dao.GenericDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -17,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Bruno
  */
-@WebServlet(name = "EstadoNovo", urlPatterns = {"/EstadoNovo"})
-public class EstadoNovo extends HttpServlet {
+@WebServlet(name = "EstadoCarregar", urlPatterns = {"/EstadoCarregar"})
+public class EstadoCarregar extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,10 +32,20 @@ public class EstadoNovo extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-     response.setContentType("text/html;charset=iso-8859-1");
-     Estado oEstado = new Estado();
-     request.setAttribute("estado", oEstado);
-     request.getRequestDispatcher("/cadastros/estado/estadoCadastrar.jsp").forward(request, response);
+      response.setContentType("text/html;charset=iso-8859-1");
+    try {
+        int idEstado = Integer.parseInt(request.getParameter("idEstado"));
+        
+        GenericDAO dao = new EstadoDAO();
+        request.setAttribute("estado", dao.carregar(idEstado));
+        
+        request.getRequestDispatcher("/cadastros/estado/estadoCadastrar.jsp")
+               .forward(request, response);
+        
+    } catch (Exception e) {
+        System.out.println("Problema na Servlet ao carregar Estado! Erro: " + e.getMessage());
+        e.printStackTrace();
+    }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
